@@ -33,7 +33,17 @@ class TestTokens(unittest.TestCase):
 
     def test_tampered_token_is_rejected(self):
         token = auth.issue_token(1, "bob")
-        tampered = token[:-1] + ("A" if token[-1] != "A" else "B")
+        # Flip a character in the middle of the token rather than the very
+        # last one. base64url encodes 3 bytes per 4 characters, so the
+        # final character of a signature can carry unused padding bits
+        # that are discarded on decode -- flipping only that character
+        # sometimes decodes to the *same* signature bytes, making the
+        # tamper undetectable and the test flaky. A middle character is
+        # always part of real payload/signature bits, so this reliably
+        # produces a different decoded value.
+        mid = len(token) // 2
+        flipped_char = "A" if token[mid] != "A" else "B"
+        tampered = token[:mid] + flipped_char + token[mid + 1 :]
         with self.assertRaises(auth.InvalidToken):
             auth.verify_token(tampered)
 
