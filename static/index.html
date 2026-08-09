@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>instaclone</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a href="#/feed" class="brand">instaclone</a>
+      <nav class="topnav" id="topnav"></nav>
+    </div>
+  </header>
+
+  <main id="app" class="app"></main>
+
+  <template id="tpl-auth">
+    <div class="auth-card">
+      <h1>instaclone</h1>
+      <div class="auth-tabs">
+        <button class="auth-tab active" data-mode="login">Log in</button>
+        <button class="auth-tab" data-mode="signup">Sign up</button>
+      </div>
+      <form id="auth-form">
+        <input type="text" id="auth-username" placeholder="Username" required>
+        <input type="email" id="auth-email" placeholder="Email" class="signup-only" style="display:none">
+        <input type="password" id="auth-password" placeholder="Password" required minlength="8">
+        <button type="submit">Continue</button>
+      </form>
+      <p class="auth-error" id="auth-error"></p>
+    </div>
+  </template>
+
+  <template id="tpl-feed">
+    <div class="feed-page">
+      <div class="feed-tabs">
+        <button class="feed-tab active" data-feed="following">Following</button>
+        <button class="feed-tab" data-feed="explore">Explore</button>
+      </div>
+      <div class="post-list" id="post-list"></div>
+      <button id="load-more" class="load-more">Load more</button>
+    </div>
+  </template>
+
+  <template id="tpl-post-card">
+    <article class="post-card">
+      <div class="post-header">
+        <a class="post-avatar" href="#"></a>
+        <a class="post-username" href="#"></a>
+      </div>
+      <img class="post-image" alt="post image">
+      <div class="post-actions">
+        <button class="like-btn">&#9825; <span class="like-count">0</span></button>
+      </div>
+      <div class="post-caption"></div>
+      <div class="post-comments"></div>
+      <form class="comment-form">
+        <input type="text" placeholder="Add a comment..." maxlength="1000">
+        <button type="submit">Post</button>
+      </form>
+    </article>
+  </template>
+
+  <template id="tpl-upload">
+    <div class="upload-page">
+      <h2>New post</h2>
+      <form id="upload-form">
+        <input type="file" id="upload-file" accept="image/*" required>
+        <img id="upload-preview" style="display:none">
+        <textarea id="upload-caption" placeholder="Write a caption..." maxlength="2000"></textarea>
+        <button type="submit">Share</button>
+      </form>
+      <p class="upload-error" id="upload-error"></p>
+    </div>
+  </template>
+
+  <template id="tpl-profile">
+    <div class="profile-page">
+      <div class="profile-header">
+        <div class="profile-avatar"></div>
+        <div class="profile-info">
+          <div class="profile-username-row">
+            <h2 class="profile-username"></h2>
+            <button class="follow-btn"></button>
+          </div>
+          <div class="profile-stats">
+            <span><strong class="stat-posts">0</strong> posts</span>
+            <span><strong class="stat-followers">0</strong> followers</span>
+            <span><strong class="stat-following">0</strong> following</span>
+          </div>
+          <p class="profile-bio"></p>
+        </div>
+      </div>
+      <div class="profile-grid" id="profile-grid"></div>
+    </div>
+  </template>
+
+  <script src="/app.js"></script>
+</body>
+</html>
