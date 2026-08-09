@@ -1,0 +1,40 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.11"]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run test suite
+        run: python -m unittest discover -s tests -v
+
+      - name: Smoke-test the server boots and serves /api/health
+        run: |
+          INSTACLONE_DB_PATH=/tmp/ci_smoke.db \
+          INSTACLONE_MEDIA_DIR=/tmp/ci_smoke_media \
+          INSTACLONE_PORT=8099 \
+          python -m app.server &
+          SERVER_PID=$!
+          sleep 2
+          curl -sf http://localhost:8099/api/health
+          kill $SERVER_PID
