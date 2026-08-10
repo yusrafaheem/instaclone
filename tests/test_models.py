@@ -172,6 +172,12 @@ class TestPostsModel(unittest.TestCase):
         self.assertEqual(feed, [])
         self.assertIsNone(cursor)
 
+    def test_explore_feed_orders_newest_first(self):
+        first = posts_model.create_post(self.conn, self.user_id, "older", "i", "t")
+        second = posts_model.create_post(self.conn, self.user_id, "newer", "i", "t")
+        feed, _ = posts_model.explore_feed(self.conn, limit=10, cursor=None)
+        self.assertEqual([p["id"] for p in feed], [second, first])
+
 
 class TestSocialModel(unittest.TestCase):
     def setUp(self):
