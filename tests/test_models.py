@@ -229,6 +229,9 @@ class TestSocialModel(unittest.TestCase):
         self.assertTrue(social_model.follow(self.conn, self.alice, self.bob))
         self.assertFalse(social_model.follow(self.conn, self.alice, self.bob))
 
+    def test_unlike_post_when_not_liked_returns_false(self):
+        self.assertFalse(social_model.unlike_post(self.conn, self.alice, self.post_id))
+
 
 if __name__ == "__main__":
     unittest.main()
