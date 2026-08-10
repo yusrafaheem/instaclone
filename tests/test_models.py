@@ -67,6 +67,14 @@ class TestUsersModel(unittest.TestCase):
     def test_get_user_by_id_returns_none_for_missing_id(self):
         self.assertIsNone(users_model.get_user_by_id(self.conn, 99999))
 
+    def test_username_taken_error_message_contains_username(self):
+        users_model.create_user(self.conn, "alice", "a1@example.com", b"hash")
+        try:
+            users_model.create_user(self.conn, "alice", "a2@example.com", b"hash")
+            self.fail("expected UsernameTakenError")
+        except users_model.UsernameTakenError as e:
+            self.assertIn("alice", str(e))
+
 
 class TestPostsModel(unittest.TestCase):
     def setUp(self):
