@@ -1,0 +1,44 @@
+"""Tests for the SQLite connection-management layer (app/db.py): thread-
+local connections, the WAL/foreign-key pragmas, and the schema
+init/reset helpers the rest of the test suite relies on."""
+
+import tempfile
+import unittest
+from pathlib import Path
+
+from app import db, settings
+
+
+class TestGetConnection(unittest.TestCase):
+    def setUp(self):
+        self._tmpdir = tempfile.TemporaryDirectory()
+        self._orig_db_path = settings.DB_PATH
+        settings.DB_PATH = str(Path(self._tmpdir.name) / "test.db")
+        db.close_and_forget()
+
+    def tearDown(self):
+        db.close_and_forget()
+        settings.DB_PATH = self._orig_db_path
+        self._tmpdir.cleanup()
+
+    def test_get_connection_returns_same_object_on_repeated_calls(self):
+        conn1 = db.get_connection()
+        conn2 = db.get_connection()
+        self.assertIs(conn1, conn2)
+
+
+class TestInitAndResetDb(unittest.TestCase):
+    def setUp(self):
+        self._tmpdir = tempfile.TemporaryDirectory()
+        self._orig_db_path = settings.DB_PATH
+        settings.DB_PATH = str(Path(self._tmpdir.name) / "test.db")
+        db.close_and_forget()
+
+    def tearDown(self):
+        db.close_and_forget()
+        settings.DB_PATH = self._orig_db_path
+        self._tmpdir.cleanup()
+
+
+if __name__ == "__main__":
+    unittest.main()
