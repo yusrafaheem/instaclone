@@ -92,6 +92,12 @@ class TestInitAndResetDb(unittest.TestCase):
         count = db.get_connection().execute("SELECT COUNT(*) AS n FROM users").fetchone()["n"]
         self.assertEqual(count, 0)
 
+    def test_close_and_forget_allows_fresh_connection(self):
+        conn1 = db.get_connection()
+        db.close_and_forget()
+        conn2 = db.get_connection()
+        self.assertIsNot(conn1, conn2)
+
 
 if __name__ == "__main__":
     unittest.main()
