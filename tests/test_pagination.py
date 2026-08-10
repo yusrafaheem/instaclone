@@ -1,3 +1,5 @@
+import base64
+import json
 import unittest
 
 from app.pagination import decode_cursor, encode_cursor
@@ -28,6 +30,13 @@ class TestPagination(unittest.TestCase):
         c1 = encode_cursor(1700000000.0, 1)
         c2 = encode_cursor(1700000000.0, 2)
         self.assertNotEqual(c1, c2)
+
+    def test_encode_cursor_output_is_url_safe(self):
+        # created_at/id values chosen to be likely to produce '+' or '/'
+        # under standard base64; urlsafe encoding must avoid both.
+        cursor = encode_cursor(1700000000.5, 123456789)
+        self.assertNotIn("+", cursor)
+        self.assertNotIn("/", cursor)
 
 
 if __name__ == "__main__":
