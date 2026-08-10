@@ -75,6 +75,14 @@ class TestUsersModel(unittest.TestCase):
         except users_model.UsernameTakenError as e:
             self.assertIn("alice", str(e))
 
+    def test_email_taken_error_message_contains_email(self):
+        users_model.create_user(self.conn, "alice", "same@example.com", b"hash")
+        try:
+            users_model.create_user(self.conn, "bob", "same@example.com", b"hash")
+            self.fail("expected EmailTakenError")
+        except users_model.EmailTakenError as e:
+            self.assertIn("same@example.com", str(e))
+
 
 class TestPostsModel(unittest.TestCase):
     def setUp(self):
