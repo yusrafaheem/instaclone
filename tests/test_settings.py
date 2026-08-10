@@ -37,6 +37,11 @@ class TestSettings(unittest.TestCase):
         importlib.reload(settings)
         self.assertEqual(settings.JWT_TTL_SECONDS, 60 * 60 * 24 * 7)
 
+    def test_server_port_env_var_override(self):
+        with mock.patch.dict(os.environ, {"INSTACLONE_PORT": "9999"}):
+            importlib.reload(settings)
+            self.assertEqual(settings.SERVER_PORT, 9999)
+
 
 if __name__ == "__main__":
     unittest.main()
