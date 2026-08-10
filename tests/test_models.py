@@ -250,6 +250,9 @@ class TestSocialModel(unittest.TestCase):
     def test_comments_for_post_empty_list_when_none(self):
         self.assertEqual(social_model.comments_for_post(self.conn, self.post_id), [])
 
+    def test_like_count_zero_when_no_likes(self):
+        self.assertEqual(social_model.like_count(self.conn, self.post_id), 0)
+
 
 if __name__ == "__main__":
     unittest.main()
