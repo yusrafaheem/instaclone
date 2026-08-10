@@ -79,6 +79,19 @@ class TestInitAndResetDb(unittest.TestCase):
         db.init_db()
         db.init_db()  # must not raise on tables that already exist
 
+    def test_reset_db_clears_existing_rows(self):
+        db.init_db()
+        conn = db.get_connection()
+        conn.execute(
+            "INSERT INTO users (username, email, password_hash, bio, created_at) "
+            "VALUES ('a', 'a@example.com', ?, '', 0)",
+            (b"hash",),
+        )
+        conn.commit()
+        db.reset_db()
+        count = db.get_connection().execute("SELECT COUNT(*) AS n FROM users").fetchone()["n"]
+        self.assertEqual(count, 0)
+
 
 if __name__ == "__main__":
     unittest.main()
