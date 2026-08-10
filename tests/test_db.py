@@ -46,6 +46,11 @@ class TestGetConnection(unittest.TestCase):
         enabled = conn.execute("PRAGMA foreign_keys").fetchone()[0]
         self.assertEqual(enabled, 1)
 
+    def test_row_factory_allows_column_access_by_name(self):
+        conn = db.get_connection()
+        row = conn.execute("SELECT 1 AS one").fetchone()
+        self.assertEqual(row["one"], 1)
+
 
 class TestInitAndResetDb(unittest.TestCase):
     def setUp(self):
