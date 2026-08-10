@@ -49,6 +49,12 @@ class TestSettings(unittest.TestCase):
             importlib.reload(settings)
             self.assertEqual(settings.SERVER_PORT, 8000)
 
+    def test_media_dirs_derive_from_media_dir_env_var(self):
+        with mock.patch.dict(os.environ, {"INSTACLONE_MEDIA_DIR": "/tmp/custom_media"}):
+            importlib.reload(settings)
+            self.assertEqual(str(settings.UPLOADS_DIR), "/tmp/custom_media/uploads")
+            self.assertEqual(str(settings.THUMBS_DIR), "/tmp/custom_media/thumbs")
+
 
 if __name__ == "__main__":
     unittest.main()
