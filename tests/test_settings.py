@@ -42,6 +42,13 @@ class TestSettings(unittest.TestCase):
             importlib.reload(settings)
             self.assertEqual(settings.SERVER_PORT, 9999)
 
+    def test_server_port_defaults_to_8000_when_unset(self):
+        env = dict(os.environ)
+        env.pop("INSTACLONE_PORT", None)
+        with mock.patch.dict(os.environ, env, clear=True):
+            importlib.reload(settings)
+            self.assertEqual(settings.SERVER_PORT, 8000)
+
 
 if __name__ == "__main__":
     unittest.main()
