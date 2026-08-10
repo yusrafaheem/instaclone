@@ -38,6 +38,13 @@ class TestPagination(unittest.TestCase):
         self.assertNotIn("+", cursor)
         self.assertNotIn("/", cursor)
 
+    def test_decode_cursor_rejects_non_dict_json(self):
+        # A syntactically valid base64/JSON payload that isn't the
+        # expected {"t": ..., "id": ...} shape should degrade to None,
+        # not raise, same as a corrupted cursor.
+        raw = base64.urlsafe_b64encode(json.dumps([1, 2, 3]).encode("utf-8"))
+        self.assertIsNone(decode_cursor(raw.decode("ascii")))
+
 
 if __name__ == "__main__":
     unittest.main()
