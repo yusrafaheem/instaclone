@@ -158,6 +158,9 @@ class TestPostsModel(unittest.TestCase):
     def test_delete_post_returns_false_for_nonexistent_post(self):
         self.assertFalse(posts_model.delete_post(self.conn, 99999, self.user_id))
 
+    def test_get_post_returns_none_for_missing_id(self):
+        self.assertIsNone(posts_model.get_post(self.conn, 99999))
+
 
 class TestSocialModel(unittest.TestCase):
     def setUp(self):
