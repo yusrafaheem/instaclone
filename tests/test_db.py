@@ -36,6 +36,11 @@ class TestGetConnection(unittest.TestCase):
         conn2 = db.get_connection()
         self.assertIsNot(conn1, conn2)
 
+    def test_wal_mode_is_enabled(self):
+        conn = db.get_connection()
+        mode = conn.execute("PRAGMA journal_mode").fetchone()[0]
+        self.assertEqual(mode.lower(), "wal")
+
 
 class TestInitAndResetDb(unittest.TestCase):
     def setUp(self):
