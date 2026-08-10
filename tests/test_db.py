@@ -26,6 +26,10 @@ class TestGetConnection(unittest.TestCase):
         conn2 = db.get_connection()
         self.assertIs(conn1, conn2)
 
+    def test_get_connection_creates_the_db_file(self):
+        db.get_connection()
+        self.assertTrue(Path(settings.DB_PATH).exists())
+
 
 class TestInitAndResetDb(unittest.TestCase):
     def setUp(self):
