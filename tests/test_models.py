@@ -58,6 +58,12 @@ class TestUsersModel(unittest.TestCase):
         self.assertEqual(users_model.following_count(self.conn, a), 1)
         self.assertEqual(users_model.follower_count(self.conn, a), 0)
 
+    def test_update_avatar(self):
+        uid = users_model.create_user(self.conn, "alice", "a@example.com", b"hash")
+        users_model.update_avatar(self.conn, uid, "avatars/alice.jpg")
+        row = users_model.get_user_by_id(self.conn, uid)
+        self.assertEqual(row["avatar_path"], "avatars/alice.jpg")
+
 
 class TestPostsModel(unittest.TestCase):
     def setUp(self):
