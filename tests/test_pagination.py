@@ -45,6 +45,10 @@ class TestPagination(unittest.TestCase):
         raw = base64.urlsafe_b64encode(json.dumps([1, 2, 3]).encode("utf-8"))
         self.assertIsNone(decode_cursor(raw.decode("ascii")))
 
+    def test_cursor_round_trips_with_zero_id(self):
+        cursor = encode_cursor(1700000000.0, 0)
+        self.assertEqual(decode_cursor(cursor), (1700000000.0, 0))
+
 
 if __name__ == "__main__":
     unittest.main()
