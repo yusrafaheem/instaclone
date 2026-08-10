@@ -247,6 +247,9 @@ class TestSocialModel(unittest.TestCase):
         comments = social_model.comments_for_post(self.conn, self.post_id, limit=3)
         self.assertEqual(len(comments), 3)
 
+    def test_comments_for_post_empty_list_when_none(self):
+        self.assertEqual(social_model.comments_for_post(self.conn, self.post_id), [])
+
 
 if __name__ == "__main__":
     unittest.main()
