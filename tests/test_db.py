@@ -64,6 +64,17 @@ class TestInitAndResetDb(unittest.TestCase):
         settings.DB_PATH = self._orig_db_path
         self._tmpdir.cleanup()
 
+    def test_init_db_creates_expected_tables(self):
+        db.init_db()
+        conn = db.get_connection()
+        tables = {
+            row["name"]
+            for row in conn.execute(
+                "SELECT name FROM sqlite_master WHERE type = 'table'"
+            ).fetchall()
+        }
+        self.assertTrue({"users", "posts", "follows", "likes", "comments"} <= tables)
+
 
 if __name__ == "__main__":
     unittest.main()
