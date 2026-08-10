@@ -23,6 +23,11 @@ class TestSettings(unittest.TestCase):
         self.assertTrue(settings.DB_PATH.endswith("instaclone.db"))
         self.assertTrue(Path(settings.DB_PATH).is_absolute())
 
+    def test_db_path_env_var_override(self):
+        with mock.patch.dict(os.environ, {"INSTACLONE_DB_PATH": "/tmp/custom.db"}):
+            importlib.reload(settings)
+            self.assertEqual(settings.DB_PATH, "/tmp/custom.db")
+
 
 if __name__ == "__main__":
     unittest.main()
