@@ -33,6 +33,10 @@ class TestSettings(unittest.TestCase):
             importlib.reload(settings)
             self.assertEqual(settings.JWT_SECRET, "super-secret")
 
+    def test_jwt_ttl_defaults_to_seven_days(self):
+        importlib.reload(settings)
+        self.assertEqual(settings.JWT_TTL_SECONDS, 60 * 60 * 24 * 7)
+
 
 if __name__ == "__main__":
     unittest.main()
