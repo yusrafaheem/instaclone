@@ -64,6 +64,9 @@ class TestUsersModel(unittest.TestCase):
         row = users_model.get_user_by_id(self.conn, uid)
         self.assertEqual(row["avatar_path"], "avatars/alice.jpg")
 
+    def test_get_user_by_id_returns_none_for_missing_id(self):
+        self.assertIsNone(users_model.get_user_by_id(self.conn, 99999))
+
 
 class TestPostsModel(unittest.TestCase):
     def setUp(self):
