@@ -185,6 +185,11 @@ class TestPostsModel(unittest.TestCase):
         page2, _ = posts_model.explore_feed(self.conn, limit=2, cursor=cursor1)
         self.assertEqual(set(p["id"] for p in page1) & set(p["id"] for p in page2), set())
 
+    def test_create_post_ids_increment(self):
+        first = posts_model.create_post(self.conn, self.user_id, "a", "i", "t")
+        second = posts_model.create_post(self.conn, self.user_id, "b", "i", "t")
+        self.assertGreater(second, first)
+
 
 class TestSocialModel(unittest.TestCase):
     def setUp(self):
