@@ -241,6 +241,12 @@ class TestSocialModel(unittest.TestCase):
     def test_is_following_false_when_not_following(self):
         self.assertFalse(social_model.is_following(self.conn, self.alice, self.bob))
 
+    def test_comments_for_post_respects_limit(self):
+        for i in range(5):
+            social_model.add_comment(self.conn, self.post_id, self.alice, f"comment {i}")
+        comments = social_model.comments_for_post(self.conn, self.post_id, limit=3)
+        self.assertEqual(len(comments), 3)
+
 
 if __name__ == "__main__":
     unittest.main()
