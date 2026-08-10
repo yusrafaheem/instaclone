@@ -41,6 +41,11 @@ class TestGetConnection(unittest.TestCase):
         mode = conn.execute("PRAGMA journal_mode").fetchone()[0]
         self.assertEqual(mode.lower(), "wal")
 
+    def test_foreign_keys_pragma_is_enabled(self):
+        conn = db.get_connection()
+        enabled = conn.execute("PRAGMA foreign_keys").fetchone()[0]
+        self.assertEqual(enabled, 1)
+
 
 class TestInitAndResetDb(unittest.TestCase):
     def setUp(self):
