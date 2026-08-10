@@ -178,6 +178,13 @@ class TestPostsModel(unittest.TestCase):
         feed, _ = posts_model.explore_feed(self.conn, limit=10, cursor=None)
         self.assertEqual([p["id"] for p in feed], [second, first])
 
+    def test_explore_feed_pagination_excludes_seen_posts(self):
+        for i in range(5):
+            posts_model.create_post(self.conn, self.user_id, f"post {i}", "i", "t")
+        page1, cursor1 = posts_model.explore_feed(self.conn, limit=2, cursor=None)
+        page2, _ = posts_model.explore_feed(self.conn, limit=2, cursor=cursor1)
+        self.assertEqual(set(p["id"] for p in page1) & set(p["id"] for p in page2), set())
+
 
 class TestSocialModel(unittest.TestCase):
     def setUp(self):
