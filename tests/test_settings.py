@@ -28,6 +28,11 @@ class TestSettings(unittest.TestCase):
             importlib.reload(settings)
             self.assertEqual(settings.DB_PATH, "/tmp/custom.db")
 
+    def test_jwt_secret_env_var_override(self):
+        with mock.patch.dict(os.environ, {"INSTACLONE_JWT_SECRET": "super-secret"}):
+            importlib.reload(settings)
+            self.assertEqual(settings.JWT_SECRET, "super-secret")
+
 
 if __name__ == "__main__":
     unittest.main()
