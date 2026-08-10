@@ -155,6 +155,9 @@ class TestPostsModel(unittest.TestCase):
         feed, _ = posts_model.explore_feed(self.conn, limit=10, cursor=None)
         self.assertEqual(len(feed), 2)
 
+    def test_delete_post_returns_false_for_nonexistent_post(self):
+        self.assertFalse(posts_model.delete_post(self.conn, 99999, self.user_id))
+
 
 class TestSocialModel(unittest.TestCase):
     def setUp(self):
