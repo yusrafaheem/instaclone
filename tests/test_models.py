@@ -166,6 +166,12 @@ class TestPostsModel(unittest.TestCase):
         self.assertEqual(page, [])
         self.assertIsNone(cursor)
 
+    def test_feed_for_follower_empty_when_following_nobody(self):
+        lonely = users_model.create_user(self.conn, "lonely", "l@example.com", b"h")
+        feed, cursor = posts_model.feed_for_follower(self.conn, lonely, limit=10, cursor=None)
+        self.assertEqual(feed, [])
+        self.assertIsNone(cursor)
+
 
 class TestSocialModel(unittest.TestCase):
     def setUp(self):
