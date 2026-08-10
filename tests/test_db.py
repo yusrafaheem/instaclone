@@ -75,6 +75,10 @@ class TestInitAndResetDb(unittest.TestCase):
         }
         self.assertTrue({"users", "posts", "follows", "likes", "comments"} <= tables)
 
+    def test_init_db_is_idempotent(self):
+        db.init_db()
+        db.init_db()  # must not raise on tables that already exist
+
 
 if __name__ == "__main__":
     unittest.main()
