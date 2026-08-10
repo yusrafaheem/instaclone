@@ -43,6 +43,10 @@ class TestRateLimiter(unittest.TestCase):
         allowed = sum(1 for _ in range(50) if limiter.allow("client-a"))
         self.assertLessEqual(allowed, 10)
 
+    def test_capacity_matches_requests_per_minute_argument(self):
+        limiter = RateLimiter(requests_per_minute=42)
+        self.assertEqual(limiter._capacity, 42.0)
+
 
 if __name__ == "__main__":
     unittest.main()
