@@ -83,6 +83,11 @@ class TestUsersModel(unittest.TestCase):
         except users_model.EmailTakenError as e:
             self.assertIn("same@example.com", str(e))
 
+    def test_create_user_ids_increment(self):
+        a = users_model.create_user(self.conn, "alice", "a@example.com", b"h")
+        b = users_model.create_user(self.conn, "bob", "b@example.com", b"h")
+        self.assertGreater(b, a)
+
 
 class TestPostsModel(unittest.TestCase):
     def setUp(self):
