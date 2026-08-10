@@ -30,6 +30,12 @@ class TestGetConnection(unittest.TestCase):
         db.get_connection()
         self.assertTrue(Path(settings.DB_PATH).exists())
 
+    def test_get_connection_reopens_when_db_path_changes(self):
+        conn1 = db.get_connection()
+        settings.DB_PATH = str(Path(self._tmpdir.name) / "other.db")
+        conn2 = db.get_connection()
+        self.assertIsNot(conn1, conn2)
+
 
 class TestInitAndResetDb(unittest.TestCase):
     def setUp(self):
