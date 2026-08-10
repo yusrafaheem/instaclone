@@ -88,6 +88,14 @@ class TestUsersModel(unittest.TestCase):
         b = users_model.create_user(self.conn, "bob", "b@example.com", b"h")
         self.assertGreater(b, a)
 
+    def test_following_count_for_multiple_followees(self):
+        a = users_model.create_user(self.conn, "alice", "a@example.com", b"h")
+        b = users_model.create_user(self.conn, "bob", "b@example.com", b"h")
+        c = users_model.create_user(self.conn, "carol", "c@example.com", b"h")
+        social_model.follow(self.conn, a, b)
+        social_model.follow(self.conn, a, c)
+        self.assertEqual(users_model.following_count(self.conn, a), 2)
+
 
 class TestPostsModel(unittest.TestCase):
     def setUp(self):
