@@ -47,6 +47,17 @@ class TestRateLimiter(unittest.TestCase):
         limiter = RateLimiter(requests_per_minute=42)
         self.assertEqual(limiter._capacity, 42.0)
 
+    def test_partial_token_does_not_allow_request(self):
+        limiter = RateLimiter(requests_per_minute=60)
+        limiter.allow("client-a")  # creates the bucket
+        bucket = limiter._buckets["client-a"]
+        # Force the bucket into a state with less than one full token and
+        # no time elapsed since the last refill, so the next call can only
+        # be decided by the ">= 1.0" check itself.
+        bucket.tokens = 0.5
+        bucket.last_refill = time.time()
+        self.assertFalse(limiter.allow("client-a"))
+
 
 if __name__ == "__main__":
     unittest.main()
