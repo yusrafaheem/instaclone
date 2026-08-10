@@ -161,6 +161,11 @@ class TestPostsModel(unittest.TestCase):
     def test_get_post_returns_none_for_missing_id(self):
         self.assertIsNone(posts_model.get_post(self.conn, 99999))
 
+    def test_posts_by_user_empty_when_no_posts(self):
+        page, cursor = posts_model.posts_by_user(self.conn, self.user_id, limit=10, cursor=None)
+        self.assertEqual(page, [])
+        self.assertIsNone(cursor)
+
 
 class TestSocialModel(unittest.TestCase):
     def setUp(self):
